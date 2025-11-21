@@ -73,10 +73,6 @@ This project builds upon the excellent work of:
 - **[PaddlePaddle](https://github.com/PaddlePaddle/Paddle)** for the deep learning infrastructure
 - The open-source community for various tools and libraries
 
-## License
-
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
 ## Contact
 
 For questions, suggestions, or collaboration opportunities:
