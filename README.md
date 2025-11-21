@@ -4,7 +4,7 @@
 
 ## Overview
 
-**Sinhala OCR** is a production-grade optical character recognition system created especially for the Sinhala script is called Sinhala OCR. This project intends to provide cutting-edge text recognition capabilities for Sinhala language documents, including printed text, digital documents, and real-world scene photos. It is built on top of [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR).
+**Sinhala OCR** is a production-grade optical character recognition system created especially for the Sinhala script. This project intends to provide cutting-edge text recognition capabilities for Sinhala language documents, including printed text, digital documents, and real-world scene photos. It is built on top of [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR).
 
 
 ## Motivation
