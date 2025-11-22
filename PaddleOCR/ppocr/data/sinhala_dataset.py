@@ -77,4 +77,83 @@ class SinhalaDataset(Dataset):
         
         return ''.join(cleaned)
     
- 
+    def validate_sinhala_graphemes(self, text):
+        """
+        Validate Sinhala grapheme clusters
+        Returns True if text contains valid Sinhala structure
+        """
+        if not self.validate_graphemes:
+            return True
+        
+        # Check text contains at least one Sinhala character
+        has_sinhala = any(0x0D80 <= ord(c) <= 0x0DFF for c in text)
+        
+        # Basic validation: text is not empty after normalization
+        return has_sinhala and len(text.strip()) > 0
+    
+    def get_image_info_list(self, file_list, ratio_list):
+        if isinstance(file_list, str):
+            file_list = [file_list]
+        data_lines = []
+        for idx, file in enumerate(file_list):
+            with open(file, 'rb') as f:
+                lines = f.readlines()
+                if self.mode == 'train' or ratio_list[idx] < 1.0:
+                    import random
+                    random.seed(self.seed)
+                    lines = random.sample(lines, round(len(lines) * ratio_list[idx]))
+                data_lines.extend(lines)
+        return data_lines
+    
+    def shuffle_data_random(self):
+        import random
+        random.seed(self.seed)
+        random.shuffle(self.data_lines)
+    
+    def __getitem__(self, idx):
+        file_idx = self.data_idx_order_list[idx]
+        data_line = self.data_lines[file_idx]
+        
+        try:
+            data_line = data_line.decode('utf-8')
+            substr = data_line.strip('\n').split(self.delimiter)
+            file_name = substr[0]
+            label = substr[1]
+            
+            # Normalize Sinhala text
+            label = self.normalize_sinhala_text(label)
+            
+            # Validate grapheme
+            if not self.validate_sinhala_graphemes(label):
+                raise Exception(f"Invalid Sinhala graphemes in label: {label}")
+            
+            img_path = os.path.join(self.data_dir, file_name)
+            data = {'img_path': img_path, 'label': label}
+            
+            if not os.path.exists(img_path):
+                raise Exception(f"{img_path} does not exist!")
+            
+            with open(data['img_path'], 'rb') as f:
+                img = f.read()
+                data['image'] = img
+            
+            outs = transform(data, self.ops)
+            
+        except Exception as e:
+            self.logger.error(
+                f"Error parsing line {data_line}: {str(e)}"
+            )
+            outs = None
+        
+        if outs is None:
+            rnd_idx = (
+                np.random.randint(self.__len__())
+                if self.mode == 'train'
+                else (idx + 1) % self.__len__()
+            )
+            return self.__getitem__(rnd_idx)
+        
+        return outs
+    
+    def __len__(self):
+        return len(self.data_idx_order_list)
