@@ -39,6 +39,7 @@ from ppocr.data.pgnet_dataset import PGDataSet
 from ppocr.data.pubtab_dataset import PubTabDataSet
 from ppocr.data.multi_scale_sampler import MultiScaleSampler
 from ppocr.data.latexocr_dataset import LaTeXOCRDataSet
+from ppocr.data.sinhala_dataset import SinhalaDataset
 
 # for PaddleX dataset_type
 TextDetDataset = SimpleDataSet
@@ -48,7 +49,9 @@ PubTabTableRecDataset = PubTabDataSet
 KieDataset = SimpleDataSet
 LaTeXOCRDataSet = LaTeXOCRDataSet
 
-__all__ = ["build_dataloader", "transform", "create_operators", "set_signal_handlers"]
+
+__all__ = ["build_dataloader", "transform", "create_operators", "set_signal_handlers", 'SimpleDataSet', 'LMDBDataSet', 'SinhalaDataset']
+
 
 
 def term_mp(sig_num, frame):
