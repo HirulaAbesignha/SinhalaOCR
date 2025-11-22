@@ -52,3 +52,29 @@ class SinhalaDataset(Dataset):
         self.ext_op_transform_idx = dataset_config.get('ext_op_transform_idx', 2)
         self.need_reset = True in [x < 1 for x in ratio_list]
     
+    def normalize_sinhala_text(self, text):
+        """
+        Normalize Sinhala Unicode text:
+        - Apply NFC normalization
+        - Preserve ZWJ/ZWNJ for ligatures
+        - Remove invalid characters
+        """
+        if not self.normalize_unicode:
+            return text
+        
+        # NFC normalization
+        text = unicodedata.normalize('NFC', text)
+        
+        # Remove control characters except ZWJ/ZWNJ
+        cleaned = []
+        for char in text:
+            code = ord(char)
+            if (0x0D80 <= code <= 0x0DFF or  # Sinhala block
+                code == 0x200D or code == 0x200C or  # ZWJ, ZWNJ
+                0x0030 <= code <= 0x0039 or  # Numbers
+                code in [0x0020, 0x002E, 0x002C, 0x003F, 0x0021]):  # Space, punctuation
+                cleaned.append(char)
+        
+        return ''.join(cleaned)
+    
+ 
