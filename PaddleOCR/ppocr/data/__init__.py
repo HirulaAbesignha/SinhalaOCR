@@ -48,6 +48,7 @@ MSTextRecDataset = MultiScaleDataSet
 PubTabTableRecDataset = PubTabDataSet
 KieDataset = SimpleDataSet
 LaTeXOCRDataSet = LaTeXOCRDataSet
+SinhalaDataset = SinhalaDataset
 
 
 __all__ = ["build_dataloader", "transform", "create_operators", "set_signal_handlers", 'SimpleDataSet', 'LMDBDataSet', 'SinhalaDataset']
@@ -87,6 +88,7 @@ def build_dataloader(config, mode, device, logger, seed=None):
     config = copy.deepcopy(config)
 
     support_dict = [
+        "SinhalaDataset"
         "SimpleDataSet",
         "LMDBDataSet",
         "PGDataSet",

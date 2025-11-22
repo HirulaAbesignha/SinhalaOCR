@@ -62,8 +62,7 @@ class SinhalaDataset(Dataset):
         if not self.normalize_unicode:
             return text
         
-        # NFC normalization
-        text = unicodedata.normalize('NFC', text)
+        text = unicodedata.normalize('NFC', text)   # NFC normalization
         
         # Remove control characters except ZWJ/ZWNJ
         cleaned = []
@@ -88,7 +87,7 @@ class SinhalaDataset(Dataset):
         # Check text contains at least one Sinhala character
         has_sinhala = any(0x0D80 <= ord(c) <= 0x0DFF for c in text)
         
-        # Basic validation: text is not empty after normalization
+        # text is not empty after normalization
         return has_sinhala and len(text.strip()) > 0
     
     def get_image_info_list(self, file_list, ratio_list):
